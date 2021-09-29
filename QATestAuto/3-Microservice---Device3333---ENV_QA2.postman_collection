@@ -1,0 +1,6345 @@
+{
+	"info": {
+		"_postman_id": "816b6372-f1fb-49f9-a748-7482303e7894",
+		"name": "3-Microservice---Device---ENV_QA2",
+		"description": "\n!!!!!!Mettre à jour les variables de la collection pour l'adapter a votre gateway/devices/user/configuration/environement !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n\n\n\n\n\n\n\nLes APIs exposés par la Team Usage pour les autres FT\n\nContact Support:\n Name: Team Usage\n Email: team.usages@protectline.fr",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "[TUS]- APIs-device",
+			"item": [
+				{
+					"name": "Gateway/Devices",
+					"item": [
+						{
+							"name": "wso2 qa token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											"pm.test(\"200ok- Token généré\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"\r",
+											"\r",
+											"pm.globals.set(\"access_token_Device\", pm.response.json().access_token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Basic MjJkMWQxZjctNDkxNC00ZDI1LTkwNTktYjAwZjFjNGU1YzRhOjVmNGY4YmNlLTE4MTktNDc2MS04OGM3LTQ2NTY1NTY2YjI2OA=="
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "grant_type",
+											"value": "password",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "{{userId_G}}",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "{{userPassword_G}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{endpoint_wso2}}/token",
+									"host": [
+										"{{endpoint_wso2}}"
+									],
+									"path": [
+										"token"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "token CRC  (pour test 403) Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											"//pm.globals.set(\"access_token_Device\", pm.response.json().access_token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Basic Y3JtOjNiZjVkNTRmLWU2MmUtNGMyNS05NWFmLThkNjBiOWYyMjliYg=="
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									},
+									{
+										"key": "Cookie",
+										"value": "AUTH_SESSION_ID=f07dbf39-0a94-4b2a-b34e-14124be6d6bf.keycloak-dev-1; JSESSIONID=pwVv08h9oSTKuj4R3Yvx4ZbhrrN_Z0C-bmV169kq.keycloak-dev-0"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "grant_type",
+											"value": "password",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "user_crc",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "12345678",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://keycloak.zoneoutils.dev.protectline.fr/auth/realms/Protectline/protocol/openid-connect/token",
+									"protocol": "https",
+									"host": [
+										"keycloak",
+										"zoneoutils",
+										"dev",
+										"protectline",
+										"fr"
+									],
+									"path": [
+										"auth",
+										"realms",
+										"Protectline",
+										"protocol",
+										"openid-connect",
+										"token"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get information about a specific gateway",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200ok-Gateway info retourné\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"GatewayId retourné\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    var gatewayId = pm.collectionVariables.get(\"gwy\");\r",
+											"    pm.expect(jsonData.gatewayId).to.eql(gatewayId);\r",
+											"});\r",
+											"pm.test(\"@mac retourné\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    var mac= pm.collectionVariables.get(\"parameter\");\r",
+											"    pm.expect(jsonData.macAdresse).to.eql(mac);\r",
+											"});\r",
+											"pm.test(\"serialNumber retourné\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    var sn= pm.collectionVariables.get(\"SN-GWY\");\r",
+											"    pm.expect(jsonData.serialNumber).to.eql(sn);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Constructor crow\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.constructor).to.eql(\"Crow\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"location retourné non vide\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.location).not.to.be.empty;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"dernière date d'activité retourné\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.lastActivityDateTime).not.to.be.empty;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"état de connexion de la centrale (online)\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.connection).to.eql(\"Online\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"état d'instllation de la centrale\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.installationState).not.to.be.empty;\r",
+											"});\r",
+											"pm.test(\"état d'activation de la centrale (inactive)\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.state.status).to.eql(\"inactive\");\r",
+											"});\r",
+											"//ajouter le controle sur le date event!\r",
+											"pm.test(\"Derniers événements remontent bien\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.events).not.to.be.empty;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"template groupama/orange retourné\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    var conf= pm.collectionVariables.get(\"config_gwy\");\r",
+											"    pm.expect(jsonData.config.template).to.eql(conf);\r",
+											"});\r",
+											"\r",
+											"\r",
+											"\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"description": "Authorization",
+										"key": "Authorization",
+										"value": "Bearer {{access_token_Device}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/gateways/:gatewayId?diagnostics=true",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"gateways",
+										":gatewayId"
+									],
+									"query": [
+										{
+											"key": "diagnostics",
+											"value": "true"
+										}
+									],
+									"variable": [
+										{
+											"key": "gatewayId",
+											"value": "{{gwy}}",
+											"description": "(Required) Id of gateway"
+										}
+									]
+								},
+								"description": "Get information about a specific gateway <br>\n<u>Notes</u>\n<ul>\n   <li>206 is returned with state=null when gateway is offline and exit on database</li>\n   <li>404 is retuned when the gateway not exit on database</li>\n</ul>"
+							},
+							"response": [
+								{
+									"name": "500 message",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "*/*"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "Forbidden",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Forbidden",
+									"code": 403,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						},
+						{
+							"name": "Get devices list of a specific gateway",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200ok-La liste des Devices associé à l gateway retourné \", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"//-----------------------------------------------------------------------------------------------------------------------------------------------------\r",
+											"pm.test(\"Tous les deviceId retournés\", function () {\r",
+											"  var listOfObjects = pm.response.json();\r",
+											"listOfObjects.forEach(function(entry) \r",
+											"{ pm.expect(entry.deviceId).not.to.be.empty;})\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Constructor crow\", function () {\r",
+											"  var listOfObjects = pm.response.json();\r",
+											"listOfObjects.forEach(function(entry) \r",
+											"{pm.expect(entry.constructor).to.eql(\"Crow\");}) \r",
+											"});\r",
+											"pm.test(\"Tous les models retournés\", function () {\r",
+											"  var listOfObjects = pm.response.json();\r",
+											"listOfObjects.forEach(function(entry) \r",
+											"{pm.expect(entry.model).not.to.be.empty;}) \r",
+											"});\r",
+											"pm.test(\"Tous les deviceType retournés\", function () {\r",
+											"  var listOfObjects = pm.response.json();\r",
+											"listOfObjects.forEach(function(entry) \r",
+											"{pm.expect(entry.deviceType).not.to.be.empty;}) \r",
+											"});\r",
+											"\r",
+											"pm.test(\"Tous les serialNumbers retournés\", function () {\r",
+											"  var listOfObjects = pm.response.json();\r",
+											"listOfObjects.forEach(function(entry) \r",
+											"{pm.expect(entry.serialNumber).not.to.be.empty;}) \r",
+											"});\r",
+											"\r",
+											"pm.test(\"Tous les locations retournés\", function () {\r",
+											"  var listOfObjects = pm.response.json();\r",
+											"listOfObjects.forEach(function(entry) \r",
+											"{pm.expect(entry.location).not.to.be.empty;}) \r",
+											"});\r",
+											"\r",
+											"\r",
+											"\r",
+											"\r",
+											"//-----------------------------------------------------------------------------------------------------------------------------------------------------\r",
+											"\r",
+											"var listOfObjects = pm.response.json();\r",
+											"   listOfObjects.forEach(function(entry) \r",
+											"{\r",
+											"     if (entry.lastActivityDateTime!== \"\"  ) \r",
+											"pm.test(\"Télémétries \" +entry.deviceType +\" remonté\", function () \r",
+											"{\r",
+											"pm.expect(entry.lastActivityDateTime).not.to.be.empty;  \r",
+											"pm.expect(entry.attributes.rssi).not.to.be.empty;\r",
+											"pm.expect(entry.attributes.temperature).not.to.be.empty\r",
+											"pm.expect(entry.attributes.battery).not.to.be.empty;\r",
+											"\r",
+											"})\r",
+											"});\r",
+											"//-------------------------------------------------------------\r",
+											"pm.test(\"Minimun les Télémétries d'un device remonte\" , function () \r",
+											"{\r",
+											"var listOfObjects = pm.response.json();\r",
+											"   listOfObjects.forEach(function(entry) \r",
+											"{\r",
+											"     if (entry.lastActivityDateTime!== \"\"  ) \r",
+											"\r",
+											"pm.expect(entry.lastActivityDateTime).not.to.be.empty; \r",
+											"\r",
+											"})\r",
+											"});\r",
+											"\r",
+											"//-------------------------------------------------------------\r",
+											"pm.test(\"diagnostic des devices retournés\" , function () \r",
+											"{\r",
+											"var listOfObjects = pm.response.json();\r",
+											"   listOfObjects.forEach(function(entry) \r",
+											"{\r",
+											"     if (entry.deviceType!== \"remote\" && entry.deviceType!== \"TAG\"  ) \r",
+											"\r",
+											"pm.expect(entry.diagnostics).not.to.be.empty;  \r",
+											"\r",
+											"})\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"description": "Authorization",
+										"key": "Authorization",
+										"value": "Bearer {{access_token_Device}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/gateways/:gatewayId/devices?diagnostics=true",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"gateways",
+										":gatewayId",
+										"devices"
+									],
+									"query": [
+										{
+											"key": "diagnostics",
+											"value": "true"
+										}
+									],
+									"variable": [
+										{
+											"key": "gatewayId",
+											"value": "{{gwy}}",
+											"description": "(Required) Id of gateway"
+										}
+									]
+								},
+								"description": "Get devices list of a specific gateway <br>\n<u>Notes</u>\n<ul>\n   <li>404 is retuned when the gateway not exit on database</li>\n   <li>200 is returned with empty list when no device is attached to the gateway</li>\n</ul>"
+							},
+							"response": [
+								{
+									"name": "Forbidden",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/devices",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"devices"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Forbidden",
+									"code": 403,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/devices",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"devices"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "*/*"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"503XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Service temporairement indisponible ou en maintenance.\"\r\n}",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/devices",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"devices"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Service Unavailable",
+									"code": 503,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"500XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Internal Server Error\",\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\r\n}",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/devices",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"devices"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "{\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"400XX\",\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Valeurs d'un paramètre non valide\"\n}",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/devices",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"devices"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"404XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Not found\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\"\r\n}",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/devices",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"devices"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						},
+						{
+							"name": "GET learnState",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"00ok: learnState retourné\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"pm.test(\"learnState=false\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.learnState).to.eql(false);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token_Device}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/gateways/:gatewayId/learnState",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"gateways",
+										":gatewayId",
+										"learnState"
+									],
+									"variable": [
+										{
+											"key": "gatewayId",
+											"value": "{{gwy}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update information of device",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200ok-Info sur device X retourné\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Location du device X mise à jour\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.location).not.to.eql(\"S_1\");\r",
+											"\r",
+											"     pm.expect(jsonData.location).not.to.be.empty;\r",
+											"    \r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"description": "Authorization",
+										"key": "Authorization",
+										"value": "Bearer {{access_token_Device}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"location\": \"xxx2\",\r\n  \"installationState\": \"active\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/gateways/:gatewayId/devices/:deviceId",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"gateways",
+										":gatewayId",
+										"devices",
+										":deviceId"
+									],
+									"query": [
+										{
+											"key": "location",
+											"value": "",
+											"description": "location of device or gateway",
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": "gatewayId",
+											"value": "{{gwy}}",
+											"description": "(Required) Id of Gatway"
+										},
+										{
+											"key": "deviceId",
+											"value": "{{devicex}}",
+											"description": "(Required) Id of Device"
+										}
+									]
+								},
+								"description": "Update information of device"
+							},
+							"response": [
+								{
+									"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"500XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Internal Server Error\",\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\r\n}",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/devices/:deviceId?location=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"devices",
+												":deviceId"
+											],
+											"query": [
+												{
+													"key": "location",
+													"value": "<string>"
+												}
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												},
+												{
+													"key": "deviceId"
+												}
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "{\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"400XX\",\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Valeurs d'un paramètre non valide\"\n}",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/devices/:deviceId?location=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"devices",
+												":deviceId"
+											],
+											"query": [
+												{
+													"key": "location",
+													"value": "<string>"
+												}
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												},
+												{
+													"key": "deviceId"
+												}
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"503XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Service temporairement indisponible ou en maintenance.\"\r\n}",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/devices/:deviceId?location=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"devices",
+												":deviceId"
+											],
+											"query": [
+												{
+													"key": "location",
+													"value": "<string>"
+												}
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												},
+												{
+													"key": "deviceId"
+												}
+											]
+										}
+									},
+									"status": "Service Unavailable",
+									"code": 503,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/devices/:deviceId?location=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"devices",
+												":deviceId"
+											],
+											"query": [
+												{
+													"key": "location",
+													"value": "<string>"
+												}
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												},
+												{
+													"key": "deviceId"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "*/*"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"404XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Not found\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\"\r\n}",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/devices/:deviceId?location=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"devices",
+												":deviceId"
+											],
+											"query": [
+												{
+													"key": "location",
+													"value": "<string>"
+												}
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												},
+												{
+													"key": "deviceId"
+												}
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						},
+						{
+							"name": "Take a picture of a specific device\n",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200ok- Prise d'une photo à la demande\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"pm.test(\"pictureId retourné\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.pictureId).not.to.be.empty;\r",
+											"});\r",
+											"pm.test(\"position = 1\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.position).to.eql(1);\r",
+											"});\r",
+											"pm.test(\"Photo retourné, binaryData non vide\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.binaryData).not.to.be.empty;\r",
+											"});\r",
+											"\r",
+											"\r",
+											"\r",
+											"//setTimeout(function(){}, 5000);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"description": "Authorization",
+										"key": "Authorization",
+										"value": "Bearer {{access_token_Device}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/gateways/:gatewayId/devices/:deviceId/picture",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"gateways",
+										":gatewayId",
+										"devices",
+										":deviceId",
+										"picture"
+									],
+									"variable": [
+										{
+											"key": "gatewayId",
+											"value": "{{gwy}}",
+											"description": "(Required) Id of Gatway"
+										},
+										{
+											"key": "deviceId",
+											"value": "{{pircamId}}",
+											"description": "(Required) Id of Device"
+										}
+									]
+								},
+								"description": "Get information about a specific device <br>\n<u>Notes</u>\n<ul>\n   <li>Response is usually return within 10 seconds</li>\n   <li>Picture is encoded in 64 base</li>\n</ul>"
+							},
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/devices/:deviceId/picture",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"devices",
+												":deviceId",
+												"picture"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												},
+												{
+													"key": "deviceId"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "*/*"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "{\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"400XX\",\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Valeurs d'un paramètre non valide\"\n}",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/devices/:deviceId/picture",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"devices",
+												":deviceId",
+												"picture"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												},
+												{
+													"key": "deviceId"
+												}
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"500XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Internal Server Error\",\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\r\n}",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/devices/:deviceId/picture",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"devices",
+												":deviceId",
+												"picture"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												},
+												{
+													"key": "deviceId"
+												}
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"503XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Service temporairement indisponible ou en maintenance.\"\r\n}",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/devices/:deviceId/picture",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"devices",
+												":deviceId",
+												"picture"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												},
+												{
+													"key": "deviceId"
+												}
+											]
+										}
+									},
+									"status": "Service Unavailable",
+									"code": 503,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"404XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Not found\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\"\r\n}",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/devices/:deviceId/picture",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"devices",
+												":deviceId",
+												"picture"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												},
+												{
+													"key": "deviceId"
+												}
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						},
+						{
+							"name": "GET secret-code",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200ok-SecretCode retourné\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"SecretCode non vide\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).not.to.be.empty;\r",
+											"    });"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token_Device}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/sites/{{contractid}}/secretCode",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"sites",
+										"{{contractid}}",
+										"secretCode"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "PUT secret code",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200ok-SecretCode retourné\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"SecretCode modifié\", function () {\r",
+											"var jsonData = pm.response.json();\r",
+											"pm.expect(jsonData.secretCode).not.to.be.empty;\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token_Device}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{  \"secretCode\": \"{{$randomLastName}}\" }"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/sites/{{contractid}}/secretCode",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"sites",
+										"{{contractid}}",
+										"secretCode"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update device parameters-Keypad sound",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200ok-son du keypad modifié à 1\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer  {{access_token_Device}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\"parameters\": {\r\n\"kpd_loud\": 1\r\n}\r\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/gateways/:gatewayId/devices/:deviceId/parameters",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"gateways",
+										":gatewayId",
+										"devices",
+										":deviceId",
+										"parameters"
+									],
+									"variable": [
+										{
+											"key": "gatewayId",
+											"value": "{{gwy}}"
+										},
+										{
+											"key": "deviceId",
+											"value": "{{id-keypad}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update device parameters-Pircam entry delay",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200ok-arm_entry_delay du pircam modifié à 0\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token_Device}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\"parameters\": {\r\n\"arm_entry_delay\": 0\r\n}\r\n}\r\n"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/gateways/:gatewayId/devices/:deviceId/parameters",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"gateways",
+										":gatewayId",
+										"devices",
+										":deviceId",
+										"parameters"
+									],
+									"variable": [
+										{
+											"key": "gatewayId",
+											"value": "{{gwy}}"
+										},
+										{
+											"key": "deviceId",
+											"value": "{{pircamId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update device parameters -Sirene ext sound",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200ok-son du sirene ext modifié à 1\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token_Device}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\"parameters\": {\r\n\"sndr_loud\": 1\r\n\r\n}\r\n}\r\n"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/gateways/:gatewayId/devices/:deviceId/parameters",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"gateways",
+										":gatewayId",
+										"devices",
+										":deviceId",
+										"parameters"
+									],
+									"variable": [
+										{
+											"key": "gatewayId",
+											"value": "{{gwy}}"
+										},
+										{
+											"key": "deviceId",
+											"value": "{{id-sireneext}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get information about a specific device",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200ok-La info de Device associé à l gateway retourné\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"pm.test(\"deviceId non vide\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.deviceId).not.to.be.empty;\r",
+											"});\r",
+											"pm.test(\"constructor crow\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.constructor).to.eql(\"Crow\");\r",
+											"});\r",
+											"pm.test(\"serialNumber non vide\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.serialNumber).not.to.be.empty;\r",
+											"    });\r",
+											"    pm.test(\"capabilities retourné non vide\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.capabilities).not.to.be.empty;\r",
+											"});\r",
+											"pm.test(\"parameters retourné non vide\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.parameters).not.to.be.empty;\r",
+											"});\r",
+											"pm.test(\"diagnostics retourné non vide\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.diagnostics).not.to.be.empty;\r",
+											"});\r",
+											"pm.test(\"statusMode retourné non vide\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.parameters.statusMode).to.eql(\"total\");\r",
+											"});\r",
+											"//----------------------------------------------------------------------------------------------\r",
+											"pm.test(\"lastActivityDateTime non vide\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.lastActivityDateTime).not.to.be.empty;\r",
+											"    });\r",
+											"\r",
+											"    pm.test(\"rssi non vide\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.attributes.rssi).not.to.be.empty;\r",
+											"    });\r",
+											"\r",
+											"\r",
+											"    pm.test(\"temperature non vide\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.attributes.temperature).not.to.be.empty;\r",
+											"    });\r",
+											"\r",
+											" pm.test(\"battery non vide\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.attributes.battery).not.to.be.empty;\r",
+											"    });\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"description": "Authorization",
+										"key": "Authorization",
+										"value": "Bearer {{access_token_Device}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/gateways/:gatewayId/devices/:deviceId?diagnostics=true",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"gateways",
+										":gatewayId",
+										"devices",
+										":deviceId"
+									],
+									"query": [
+										{
+											"key": "diagnostics",
+											"value": "true"
+										}
+									],
+									"variable": [
+										{
+											"key": "gatewayId",
+											"value": "{{gwy}}",
+											"description": "(Required) Id of Gatway"
+										},
+										{
+											"key": "deviceId",
+											"value": "{{devicex}}",
+											"description": "(Required) Id of Device"
+										}
+									]
+								},
+								"description": "Get information about a specific device <br>\n<u>Notes</u>\n<ul>\n   <li>Gateway should be on the database</li>\n   <li>Device should be on the database and associated to the gateway</li>\n</ul>"
+							},
+							"response": [
+								{
+									"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"503XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Service temporairement indisponible ou en maintenance.\"\r\n}",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/devices/:deviceId",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"devices",
+												":deviceId"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												},
+												{
+													"key": "deviceId"
+												}
+											]
+										}
+									},
+									"status": "Service Unavailable",
+									"code": 503,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "Forbidden",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/devices/:deviceId",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"devices",
+												":deviceId"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												},
+												{
+													"key": "deviceId"
+												}
+											]
+										}
+									},
+									"status": "Forbidden",
+									"code": 403,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "{\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"400XX\",\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Valeurs d'un paramètre non valide\"\n}",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/devices/:deviceId",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"devices",
+												":deviceId"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												},
+												{
+													"key": "deviceId"
+												}
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/devices/:deviceId",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"devices",
+												":deviceId"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												},
+												{
+													"key": "deviceId"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "*/*"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"500XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Internal Server Error\",\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\r\n}",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/devices/:deviceId",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"devices",
+												":deviceId"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												},
+												{
+													"key": "deviceId"
+												}
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"404XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Not found\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\"\r\n}",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/devices/:deviceId",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"devices",
+												":deviceId"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												},
+												{
+													"key": "deviceId"
+												}
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": " Gestion LocalUsers",
+					"item": [
+						{
+							"name": "Add localUser to a specific gateway",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"accesscode2 = Math.floor(Math.random() * 2000) + 1000;\r",
+											"pm.globals.set(\"accessCode\", accesscode2 );"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200ok- Nouveau localuser ajouté\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"firstName retourné\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.firstName).not.to.be.empty;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"lastName retourné\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.lastName).not.to.be.empty;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"localAccesCode retourné\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.localAccesCode).not.to.be.empty;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"localUserId généré\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.localUserId).not.to.be.empty;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"state enable\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.state).to.eql(\"enable\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"notificationActiveting retourné true\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.notificationActiveting).to.eql(true);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"notificationDisactiveting retourné true\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.notificationDisactiveting).to.eql(false);\r",
+											"});\r",
+											"\r",
+											"\r",
+											"\r",
+											"//--------------------------------recuplocaluserid/recuplocaluserid@-----------------------\r",
+											"\r",
+											"\r",
+											"    pm.test(\"localuser id non vide\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    var idu = jsonData.localUserId;\r",
+											"//var data =idu.toString();\r",
+											"    var data = String(idu);\r",
+											"pm.globals.set(\"localuserid@\", idu);\r",
+											"//var data =JSON.stringify(idu);\r",
+											"\r",
+											"    console.log(data);\r",
+											"\r",
+											"var res = data.replace(\"@\", \"%40\");\r",
+											"console.log(res);\r",
+											"    pm.globals.set(\"localuserid\", res);\r",
+											"\r",
+											"\r",
+											"      });\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"description": "Authorization",
+										"key": "Authorization",
+										"value": "Bearer {{access_token_Device}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"firstName\": \"{{$randomFirstName}}\",\n    \"lastName\": \"{{$randomLastName}}\",\n    \"localAccesCode\": \"{{accessCode}}\",\n    \"notificationActiveting\": true,\n    \"notificationDisactiveting\": false\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/gateways/:gatewayId/localUsers",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"gateways",
+										":gatewayId",
+										"localUsers"
+									],
+									"variable": [
+										{
+											"key": "gatewayId",
+											"value": "{{gwy}}",
+											"description": "(Required) gatewayId"
+										}
+									]
+								},
+								"description": "Add localUser to a specific gateway\r\n\r\nNotes :\r\n\r\n<ul><li>504 is returned when the gateway exit on the database and offline</li><li>500 is returned when Intern error</li><li>400 is returned when required feilds is empty or null</li><li>40035 is returned when localAcessCode already exist</li><li>40401 is returned when gateway is undefined</li><li>40404 is returned when userId not found</li></ul>"
+							},
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"firstName\": \"<string>\",\n    \"lastName\": \"<string>\",\n    \"localAccesCode\": \"<string>\"\n}"
+										},
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/localUsers",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"localUsers"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "*/*"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						},
+						{
+							"name": "Add device to a specific local user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200ok- Remote ajouté au nouveau localuser\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"deviceId non vide\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.deviceId).not.to.be.empty;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"serialNumber retourné\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    //var sn= pm.collectionVariables.get(\"SN-REMOTE\");\r",
+											"    pm.expect(jsonData.serialNumber).not.to.be.empty;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Constructor crow\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.constructor).to.eql(\"Crow\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"location retourné\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.location).not.to.be.empty;\r",
+											"});\r",
+											"\r",
+											"//------recup remote added-------------------------\r",
+											"\r",
+											"pm.globals.set(\"remoteadd\", pm.response.json().deviceId);\r",
+											"    \r",
+											"//-----------------------------------------------\r",
+											"    /*pm.test(\"device id non videe\", function () {\r",
+											"  var listOfObjects = pm.response.json();\r",
+											"\r",
+											"   listOfObjects.forEach(function(entry) \r",
+											"{ \r",
+											"pm.expect(entry.deviceId).not.to.be.empty;})\r",
+											"\r",
+											"pm.globals.set(\"remoteadd\", pm.response.json().devices.deviceId);\r",
+											"});*/\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"description": "(Required) Authorization",
+										"key": "Authorization",
+										"value": "Bearer {{access_token_Device}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"serialNumber\": {{$randomInt}},\n  \"constructor\": \"Crow\",\n  \"model\": \"{{pack}}-RMTW-ISM\",\n  \"location\": \"S_1\",\n  \"statusMode\": \"TOTAL\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/gateways/:gatewayId/localUsers/:localUserId/devices",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"gateways",
+										":gatewayId",
+										"localUsers",
+										":localUserId",
+										"devices"
+									],
+									"variable": [
+										{
+											"key": "gatewayId",
+											"value": "{{gwy}}",
+											"description": "(Required) gatewayId"
+										},
+										{
+											"key": "localUserId",
+											"value": "{{localuserid}}",
+											"description": "(Required) localUserId"
+										}
+									]
+								},
+								"description": "Add new badge or remote to a specific local user\r\n\r\nNotes :\r\n\r\n404 is returned when the gateway not exit on database\r\n504 is returned when the gateway exit on the database and offline\r\n400 is returned when Model, constructor not respect the predefinited list\r\nOnly 1 badge and 1 remote can be associate to a local user\r\nParameter does not need to be defined"
+							},
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "(Required) Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"type\": \"string\",\n    \"example\": \"Crow\",\n    \"default\": \"<string>\"\n}"
+										},
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/localUsers/:localUserId/devices",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"localUsers",
+												":localUserId",
+												"devices"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												},
+												{
+													"key": "localUserId"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "*/*"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						},
+						{
+							"name": "PUT Localuser",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200ok- localuser mis à jour\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"firstName  mis à jour\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.firstName).to.eql(\"Equipe\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"lastName  mis à jour\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.lastName).to.eql(\"USAGE\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"localAccesCode  mis à jour\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.localAccesCode).to.eql(\"3333\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"localUserId retourné\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.localUserId).not.to.be.empty;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"state enable\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.state).to.eql(\"enable\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"notificationActiveting mis à jour\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.notificationActiveting).to.eql(true);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"notificationDisactiveting mis à jour\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.notificationDisactiveting).to.eql(true);\r",
+											"});\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token_Device}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"localUserId\": \"{{localuserid}}\",\r\n    \"state\": \"enable\",\r\n    \"devices\": [],\r\n    \"notificationActiveting\": true,\r\n    \"notificationDisactiveting\": true,\r\n    \"firstName\": \"Equipe\",\r\n    \"lastName\": \"USAGE\",\r\n    \"localAccesCode\": \"3333\"\r\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/gateways/{{gwy}}/localUsers/{{localuserid}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"gateways",
+										"{{gwy}}",
+										"localUsers",
+										"{{localuserid}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get localUsers of a specific gateway",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200ok- List des locluser associé à la gteway retourné\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"//-------------------------------Tous les champs du localuser retourné----------------------------------------------------------------\r",
+											"\r",
+											"var listOfObjects = pm.response.json();\r",
+											"listOfObjects.forEach(function(entry) \r",
+											"\r",
+											"{ pm.test(\"Tous les champs du localuser \" + entry.localAccesCode +\" sont retournés\", function () {\r",
+											"    pm.expect(entry.firstName).not.to.be.empty;\r",
+											"     pm.expect(entry.lastName).not.to.be.empty;\r",
+											"    pm.expect(entry.localAccesCode).not.to.be.empty;\r",
+											"    pm.expect(entry.localUserId).not.to.be.empty;\r",
+											"    pm.expect(entry.state).to.eql(\"enable\");\r",
+											"//pm.expect(entry.notificationActiveting).to.eql(false && true);\r",
+											"//pm.expect(entry.notificationDisactiveting).to.eql(false && true);\r",
+											"\r",
+											"   }) \r",
+											"});\r",
+											"//-----------------------------------------------------------------------------------------------\r",
+											"pm.test(\"Dernier localuser ajouté exist dans la list\", function () {\r",
+											"  var listOfObjects = pm.response.json();\r",
+											" var localn = pm.globals.get(\"localuserid2@\");\r",
+											"   listOfObjects.forEach(function(entry) {\r",
+											"if(entry.localUserId==localn)\r",
+											"{\r",
+											"pm.response.to.have.status(200);\r",
+											"}    \r",
+											"});\r",
+											"});\r",
+											"\r",
+											"//setTimeout(function(){}, 5000);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"description": "Authorization",
+										"key": "Authorization",
+										"value": "Bearer {{access_token_Device}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/gateways/:gatewayId/localUsers",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"gateways",
+										":gatewayId",
+										"localUsers"
+									],
+									"variable": [
+										{
+											"key": "gatewayId",
+											"value": "{{gwy}}",
+											"description": "(Required) Id of gateway"
+										}
+									]
+								},
+								"description": "Get localUsers of a specific gateway \n\n Notes :"
+							},
+							"response": [
+								{
+									"name": "Forbidden",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/localUsers",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"localUsers"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Forbidden",
+									"code": 403,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/localUsers",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"localUsers"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "*/*"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "500 message",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/localUsers",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"localUsers"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						},
+						{
+							"name": "delete devices of a specific localUser",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200ok- Remote supprimé\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "Authorization",
+										"key": "Authorization",
+										"value": "Bearer {{access_token_Device}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/gateways/:gatewayId/localUsers/:localUserId/devices/:deviceId",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"gateways",
+										":gatewayId",
+										"localUsers",
+										":localUserId",
+										"devices",
+										":deviceId"
+									],
+									"variable": [
+										{
+											"key": "gatewayId",
+											"value": "{{gwy}}",
+											"description": "(Required) Id of gateway"
+										},
+										{
+											"key": "localUserId",
+											"value": "{{localuserid}}",
+											"description": "(Required) id of local User"
+										},
+										{
+											"key": "deviceId",
+											"value": "{{remoteadd}}",
+											"description": "(Required) id of device"
+										}
+									]
+								},
+								"description": "delete badge or remote of a specific localUser <br>\n<u>Notes</u>\n<ul>\n   <li>404 is returned when the gateway or user or device not exit on database</li>\n   <li>504 is returned when the gateway exsit on the database and offline</li>\n   <li>500 is returned when internal server error</li>\n</ul>"
+							},
+							"response": [
+								{
+									"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"500XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Internal Server Error\",\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\r\n}",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/localUsers/:localUserId/devices/:deviceId",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"localUsers",
+												":localUserId",
+												"devices",
+												":deviceId"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												},
+												{
+													"key": "localUserId"
+												},
+												{
+													"key": "deviceId"
+												}
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"404XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Not found\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\"\r\n}",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/localUsers/:localUserId/devices/:deviceId",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"localUsers",
+												":localUserId",
+												"devices",
+												":deviceId"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												},
+												{
+													"key": "localUserId"
+												},
+												{
+													"key": "deviceId"
+												}
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"504XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Gateway is offline or unreachable\",\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\r\n}",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/localUsers/:localUserId/devices/:deviceId",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"localUsers",
+												":localUserId",
+												"devices",
+												":deviceId"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												},
+												{
+													"key": "localUserId"
+												},
+												{
+													"key": "deviceId"
+												}
+											]
+										}
+									},
+									"status": "Gateway Timeout",
+									"code": 504,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/localUsers/:localUserId/devices/:deviceId",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"localUsers",
+												":localUserId",
+												"devices",
+												":deviceId"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												},
+												{
+													"key": "localUserId"
+												},
+												{
+													"key": "deviceId"
+												}
+											]
+										}
+									},
+									"status": "No Content",
+									"code": 204,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "*/*"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						},
+						{
+							"name": "delete localuser",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200ok- localuser supprimé\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token_Device}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/gateways/{{gwy}}/localUsers/{{localuserid}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"gateways",
+										"{{gwy}}",
+										"localUsers",
+										"{{localuserid}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "GET events/Pictures",
+					"item": [
+						{
+							"name": "Get events of a specific gateway",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200ok- Les events de la gateway sont retourné \", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"//-------------------------Tous les donneés de l'event retourné-------------------\r",
+											"var listOfObjects = pm.response.json();\r",
+											"\r",
+											"   listOfObjects.forEach(function(entry) \r",
+											"{ \r",
+											"pm.test(\"Tous les donneés de l'event \" + entry.eventId + \" sont retournés\", function () {\r",
+											"\r",
+											"pm.expect(entry.eventId).not.to.be.empty;  \r",
+											"pm.expect(entry.gatewayId).not.to.be.empty;\r",
+											"pm.expect(entry.dateTimeTB).not.to.be.empty;  \r",
+											"pm.expect(entry.dateTimeGateway).not.to.be.empty;\r",
+											"pm.expect(entry.cid).not.to.be.empty;  \r",
+											"pm.expect(entry.label).not.to.be.empty;\r",
+											"//pm.expect(entry.location).not.to.be.empty;  \r",
+											"//pm.expect(entry.user).not.to.be.empty;\r",
+											"pm.expect(entry.type).not.to.be.empty;  \r",
+											"pm.expect(entry.source).not.to.be.empty;\r",
+											"\r",
+											"})\r",
+											"});\r",
+											"\r",
+											"//--------------------------user retourné pour la liste des cid -----------------------\r",
+											"\r",
+											"var listOfObjects = pm.response.json();\r",
+											"var num= [\"1121\" ,  \"3401\" , \"1401\" , \"3441\" , \"1441\" , \"3407\" , \"1407\" , \"1444\" , \"3444\"];\r",
+											"console.log(num);\r",
+											"\r",
+											"\r",
+											"   listOfObjects.forEach(function(entry) \r",
+											"{ \r",
+											"    var aa = entry.cid;\r",
+											"console.log(aa);\r",
+											"\r",
+											"if (num.indexOf(aa)!== -1) \r",
+											"{\r",
+											"pm.test(\"user id de l'event non vide puisque cid = \" + entry.cid , function () {\r",
+											"\r",
+											"pm.expect(entry.user).not.to.be.empty;\r",
+											"})\r",
+											"}\r",
+											"\r",
+											"});\r",
+											"\r",
+											"\r",
+											"//-------------------------------------------------------------------------\r",
+											"var listOfObjects = pm.response.json();\r",
+											"\r",
+											"   listOfObjects.forEach(function(entry) \r",
+											"\r",
+											"{ \r",
+											"    if (entry.source !== \"gateway\"  ) \r",
+											"   {\r",
+											"pm.test(\"la source de l'event est device --> deviceId et location non null = \" +entry.deviceId +\" location = \" +entry.location, function () {\r",
+											" \r",
+											"pm.expect(entry.deviceId).not.to.be.empty; \r",
+											"pm.expect(entry.location).not.to.be.empty;  \r",
+											"})\r",
+											"   }\r",
+											"});\r",
+											"//------------------rescupérer eventid du picture--------------------------\r",
+											"\r",
+											"pm.test(\"Event de type picture retourné\", function () {\r",
+											"  var listOfObjects = pm.response.json();\r",
+											"\r",
+											"   listOfObjects.forEach(function(entry) {\r",
+											"if(entry.cid==\"PICTURE\")\r",
+											"{\r",
+											"\r",
+											"//console.log(\"okkkk\");\r",
+											"\r",
+											"pm.globals.set(\"event_picture3\", entry.eventId);\r",
+											"\r",
+											"}\r",
+											"//else{console.log(\"nokkk\");}\r",
+											"});\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"description": "Authorization",
+										"key": "Authorization",
+										"value": "Bearer {{access_token_Device}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/gateways/:gatewayId/events?limit=20",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"gateways",
+										":gatewayId",
+										"events"
+									],
+									"query": [
+										{
+											"key": "eDateTime",
+											"value": "",
+											"description": "Description: filter events before this date\nControl: ISO_8601 pattern and eDateTime >sDateTime",
+											"disabled": true
+										},
+										{
+											"key": "limit",
+											"value": "20",
+											"description": "Description: Limit number of events return\nControl: Min 1, Max 200"
+										},
+										{
+											"key": "sDateTime",
+											"value": "",
+											"description": "Description: filter events after this date\nControl: ISO_8601 pattern and eDateTime >sDateTime",
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": "gatewayId",
+											"value": "{{gwy}}"
+										}
+									]
+								},
+								"description": "Get events of a specific gateway <br>\n<u>Notes</u>\n<ul>\n   <li>limit=20 -> return last 20 events</li>\n   <li>limit=20 and eDateTime=01/01/2020 -> return last 20 events before 01/01/2020</li>\n   <li>limit=20 and sDateTime=01/01/2020 -> return last 20 events between now and 01/01/2020</li>\n   <li>limit=20 and eDateTime=01/01/2020 and sDateIme=01/12/2019 -> return last 20 events between 01/12/2019 and 01/01/2020</li>\n   <li>404 is returned when the gateway not exit on database</li>\n</ul>"
+							},
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/events?eDateTime=<string>&limit=15&sDateTime=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"events"
+											],
+											"query": [
+												{
+													"key": "eDateTime",
+													"value": "<string>"
+												},
+												{
+													"key": "limit",
+													"value": "15"
+												},
+												{
+													"key": "sDateTime",
+													"value": "<string>"
+												}
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "*/*"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "500 message",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/events?eDateTime=<string>&limit=15&sDateTime=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"events"
+											],
+											"query": [
+												{
+													"key": "eDateTime",
+													"value": "<string>"
+												},
+												{
+													"key": "limit",
+													"value": "15"
+												},
+												{
+													"key": "sDateTime",
+													"value": "<string>"
+												}
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "Forbidden",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/events?eDateTime=<string>&limit=15&sDateTime=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"events"
+											],
+											"query": [
+												{
+													"key": "eDateTime",
+													"value": "<string>"
+												},
+												{
+													"key": "limit",
+													"value": "15"
+												},
+												{
+													"key": "sDateTime",
+													"value": "<string>"
+												}
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Forbidden",
+									"code": 403,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						},
+						{
+							"name": "Get pictures of a specific event",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200ok- Retourné une photo prise à la demande\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"pm.test(\"Photo retourné, binaryData non vide\", function () {\r",
+											"  var listOfObjects = pm.response.json();\r",
+											"\r",
+											"   listOfObjects.forEach(function(entry) \r",
+											"{ \r",
+											"pm.expect(entry.binaryData).not.to.be.empty;})\r",
+											"});\r",
+											"\r",
+											"pm.test(\"eventId retourné \", function () {\r",
+											"  var listOfObjects = pm.response.json();\r",
+											"\r",
+											"   listOfObjects.forEach(function(entry) \r",
+											"{ \r",
+											"pm.expect(entry.eventId).not.to.be.empty;})\r",
+											"});\r",
+											"\r",
+											"pm.test(\"pictureId retourné \", function () {\r",
+											"  var listOfObjects = pm.response.json();\r",
+											"\r",
+											"   listOfObjects.forEach(function(entry) \r",
+											"{ \r",
+											"pm.expect(entry.pictureId).not.to.be.empty;})\r",
+											"});\r",
+											"\r",
+											"pm.globals.set(\"event_picture3\", 0);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"description": "Authorization",
+										"key": "Authorization",
+										"value": "Bearer {{access_token_Device}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/gateways/:gatewayId/events/:eventId/pictures",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"gateways",
+										":gatewayId",
+										"events",
+										":eventId",
+										"pictures"
+									],
+									"variable": [
+										{
+											"key": "gatewayId",
+											"value": "{{gwy}}",
+											"description": "(Required) id of gateway"
+										},
+										{
+											"key": "eventId",
+											"value": "{{event_picture3}}",
+											"description": "(Required) id of event"
+										}
+									]
+								},
+								"description": "Get pictures of a specific event <br>\n<u>Notes</u><ul><li>return list of picture in base 64 format</li></ul>\n"
+							},
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/events/:eventId/pictures",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"events",
+												":eventId",
+												"pictures"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												},
+												{
+													"key": "eventId"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "*/*"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"404XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Bad parameter\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\"\r\n}",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/events/:eventId/pictures",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"events",
+												":eventId",
+												"pictures"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												},
+												{
+													"key": "eventId"
+												}
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "Forbidden",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/events/:eventId/pictures",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"events",
+												":eventId",
+												"pictures"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												},
+												{
+													"key": "eventId"
+												}
+											]
+										}
+									},
+									"status": "Forbidden",
+									"code": 403,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"500XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Internal Server Error\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\"\r\n}",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/events/:eventId/pictures",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"events",
+												":eventId",
+												"pictures"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												},
+												{
+													"key": "eventId"
+												}
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Gateway arm/desarm",
+					"item": [
+						{
+							"name": "Update current state of a specific gateway- activation",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200ok- Activtion de la gateway encours\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"/*pm.test(\"La Status de l'activation est ongoing\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.status).to.eql(\"active\");\r",
+											"});*/\r",
+											"pm.test(\"mode total\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.mode).to.eql(\"total\");\r",
+											"});\r",
+											"pm.test(\"delay 30s\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.delay).to.eql(30);\r",
+											"});\r",
+											"\r",
+											"\r",
+											"setTimeout(function(){}, 62000);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"description": "Authorization",
+										"key": "Authorization",
+										"value": "Bearer {{access_token_Device}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/gateways/:gatewayId/state?mode=total&status=active",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"gateways",
+										":gatewayId",
+										"state"
+									],
+									"query": [
+										{
+											"key": "mode",
+											"value": "total",
+											"description": "active/inactive"
+										},
+										{
+											"key": "status",
+											"value": "active",
+											"description": "total/partial"
+										}
+									],
+									"variable": [
+										{
+											"key": "gatewayId",
+											"value": "{{gwy}}",
+											"description": "(Required) Id of gateway"
+										}
+									]
+								},
+								"description": "Update the current state of a specific gateway<br>\n     <u>Notes</u> \n<ul>\n   <li>status=active and mode=total -> full activation of installation </li>\n   <li>status=active and mode=partial -> only activation of devices configured in partial mode</li>\n   <li>status=inactive  -> full inactive of installation, mode is not required</li>\n   <li>404 is returned when the gateway not exit on database</li>\n   <li>408 is returned when the gateway's state doesn't change</li>\n   <li>504 is returned when the gateway exit on the database and offline</li>\n</ul>"
+							},
+							"response": [
+								{
+									"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"503XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Service temporairement indisponible ou en maintenance.\"\r\n}",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/state?mode=<string>&status=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"state"
+											],
+											"query": [
+												{
+													"key": "mode",
+													"value": "<string>"
+												},
+												{
+													"key": "status",
+													"value": "<string>"
+												}
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Service Unavailable",
+									"code": 503,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/state?mode=<string>&status=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"state"
+											],
+											"query": [
+												{
+													"key": "mode",
+													"value": "<string>"
+												},
+												{
+													"key": "status",
+													"value": "<string>"
+												}
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "*/*"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "{\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"400XX\",\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Valeurs d'un paramètre non valide\"\n}",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/state?mode=<string>&status=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"state"
+											],
+											"query": [
+												{
+													"key": "mode",
+													"value": "<string>"
+												},
+												{
+													"key": "status",
+													"value": "<string>"
+												}
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"State didn't change\"\r\n\t}",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/state?mode=<string>&status=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"state"
+											],
+											"query": [
+												{
+													"key": "mode",
+													"value": "<string>"
+												},
+												{
+													"key": "status",
+													"value": "<string>"
+												}
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Request Timeout",
+									"code": 408,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"404XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Not found\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\"\r\n}",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/state?mode=<string>&status=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"state"
+											],
+											"query": [
+												{
+													"key": "mode",
+													"value": "<string>"
+												},
+												{
+													"key": "status",
+													"value": "<string>"
+												}
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"500XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Internal Server Error\",\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\r\n}",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/state?mode=<string>&status=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"state"
+											],
+											"query": [
+												{
+													"key": "mode",
+													"value": "<string>"
+												},
+												{
+													"key": "status",
+													"value": "<string>"
+												}
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"405XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Impossible de trouver l'élément\"\r\n}",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/state?mode=<string>&status=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"state"
+											],
+											"query": [
+												{
+													"key": "mode",
+													"value": "<string>"
+												},
+												{
+													"key": "status",
+													"value": "<string>"
+												}
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Method Not Allowed",
+									"code": 405,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"504XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Gateway is offline or unreachable\",\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\r\n}",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/state?mode=<string>&status=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"state"
+											],
+											"query": [
+												{
+													"key": "mode",
+													"value": "<string>"
+												},
+												{
+													"key": "status",
+													"value": "<string>"
+												}
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Gateway Timeout",
+									"code": 504,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						},
+						{
+							"name": "Get the current state of a specific gateway",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code should be 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"La Status de l'activation est active\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.status).to.eql(\"active\");\r",
+											"});\r",
+											"pm.test(\"mode total\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.mode).to.eql(\"total\");\r",
+											"});\r",
+											"pm.test(\"delay 30s\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.delay).to.eql(30);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"description": "Authorization",
+										"key": "Authorization",
+										"value": "Bearer {{access_token_Device}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/gateways/:gatewayId/state",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"gateways",
+										":gatewayId",
+										"state"
+									],
+									"variable": [
+										{
+											"key": "gatewayId",
+											"value": "{{gwy}}",
+											"description": "(Required) Id of gateway"
+										}
+									]
+								},
+								"description": "Get the current state of a specific gateway <br>\n<u>Notes</u>\n<ul>\n   <li>404 is returned when the gateway not exit on database</li>\n   <li>504 is returned when the gateway exit on the database and offline</li>\n   <li>When the gateway is inactived, only parameter status is returned</li>\n</ul>"
+							},
+							"response": [
+								{
+									"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"503XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Service temporairement indisponible ou en maintenance.\"\r\n}",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/state",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"state"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Service Unavailable",
+									"code": 503,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "Forbidden",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/state",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"state"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Forbidden",
+									"code": 403,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/state",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"state"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "*/*"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"404XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Not found\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\"\r\n}",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/state",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"state"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "{\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"400XX\",\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Valeurs d'un paramètre non valide\"\n}",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/state",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"state"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"500XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Internal Server Error\",\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\r\n}",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/state",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"state"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"405XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Impossible de trouver l'élément\"\r\n}",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/state",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"state"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Method Not Allowed",
+									"code": 405,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						},
+						{
+							"name": "Get events of a specific gateway 2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200ok- Les events de la gateway sont retourné \", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"var listOfObjects = pm.response.json();\r",
+											"\r",
+											"   listOfObjects.forEach(function(entry) \r",
+											"\r",
+											"{ \r",
+											"    if (entry.cid == 3401 ) \r",
+											"pm.test(\"L'event Activation total gateway est retourné à \" + entry.dateTimeGateway  , function () {\r",
+											"\r",
+											"{ pm.expect(entry.type).not.to.be.empty;  }\r",
+											"\r",
+											"}) \r",
+											"});\r",
+											"\r",
+											"//----------------------------------------------\r",
+											"\r",
+											"var listOfObjects = pm.response.json();\r",
+											"\r",
+											"   listOfObjects.forEach(function(entry) \r",
+											"\r",
+											"{ \r",
+											"    if (entry.cid == 1401 ) \r",
+											"pm.test(\"L'event Desactivation gateway est retourné à \" + entry.dateTimeGateway  , function () {\r",
+											"\r",
+											"{ pm.expect(entry.type).not.to.be.empty;  }\r",
+											"\r",
+											"}) \r",
+											"});\r",
+											"\r",
+											"//---------------------------------------------------------\r",
+											"pm.test(\"L'events Activation/ Desactivation gateway retournés \" , function () \r",
+											"{\r",
+											"var listOfObjects = pm.response.json();\r",
+											"   listOfObjects.forEach(function(entry) \r",
+											"{\r",
+											"     if (entry.cid== 1401 || entry.cid== 3401  ) \r",
+											"\r",
+											"pm.response.to.have.status(200);\r",
+											"\r",
+											"})\r",
+											"});\r",
+											"//-----------------------------------------------------\r",
+											"\r",
+											"var listOfObjects = pm.response.json();\r",
+											"\r",
+											"\r",
+											"  pm.globals.set(\"event1\",  listOfObjects[0].eventId);\r",
+											"  pm.globals.set(\"event2\",  listOfObjects[1].eventId);\r",
+											"       console.log(listOfObjects[0].eventId);\r",
+											"       console.log(listOfObjects[1].eventId);\r",
+											"setTimeout(function(){}, 2000);\r",
+											"\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"description": "Authorization",
+										"key": "Authorization",
+										"value": "Bearer {{access_token_Device}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/gateways/:gatewayId/events?eDateTime=2021-12-03T06:00:00Z&limit=10&sDateTime=2020-12-01T06:00:00Z",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"gateways",
+										":gatewayId",
+										"events"
+									],
+									"query": [
+										{
+											"key": "eDateTime",
+											"value": "2021-12-03T06:00:00Z",
+											"description": "Description: filter events before this date\nControl: ISO_8601 pattern and eDateTime >sDateTime"
+										},
+										{
+											"key": "limit",
+											"value": "10",
+											"description": "Description: Limit number of events return\nControl: Min 1, Max 200"
+										},
+										{
+											"key": "sDateTime",
+											"value": "2020-12-01T06:00:00Z",
+											"description": "Description: filter events after this date\nControl: ISO_8601 pattern and eDateTime >sDateTime"
+										}
+									],
+									"variable": [
+										{
+											"description": "(Required) Description: id of gateway",
+											"key": "gatewayId",
+											"value": "{{gwy}}"
+										}
+									]
+								},
+								"description": "Get events of a specific gateway <br>\n<u>Notes</u>\n<ul>\n   <li>limit=20 -> return last 20 events</li>\n   <li>limit=20 and eDateTime=01/01/2020 -> return last 20 events before 01/01/2020</li>\n   <li>limit=20 and sDateTime=01/01/2020 -> return last 20 events between now and 01/01/2020</li>\n   <li>limit=20 and eDateTime=01/01/2020 and sDateIme=01/12/2019 -> return last 20 events between 01/12/2019 and 01/01/2020</li>\n   <li>404 is returned when the gateway not exit on database</li>\n</ul>"
+							},
+							"response": [
+								{
+									"name": "500 message",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/events?eDateTime=<string>&limit=15&sDateTime=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"events"
+											],
+											"query": [
+												{
+													"key": "eDateTime",
+													"value": "<string>"
+												},
+												{
+													"key": "limit",
+													"value": "15"
+												},
+												{
+													"key": "sDateTime",
+													"value": "<string>"
+												}
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/events?eDateTime=<string>&limit=15&sDateTime=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"events"
+											],
+											"query": [
+												{
+													"key": "eDateTime",
+													"value": "<string>"
+												},
+												{
+													"key": "limit",
+													"value": "15"
+												},
+												{
+													"key": "sDateTime",
+													"value": "<string>"
+												}
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "*/*"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "Forbidden",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/events?eDateTime=<string>&limit=15&sDateTime=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"events"
+											],
+											"query": [
+												{
+													"key": "eDateTime",
+													"value": "<string>"
+												},
+												{
+													"key": "limit",
+													"value": "15"
+												},
+												{
+													"key": "sDateTime",
+													"value": "<string>"
+												}
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Forbidden",
+									"code": 403,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						},
+						{
+							"name": "Update current state of a specific gateway -inactivation",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200ok- Desactivation de la gteway\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"pm.test(\"La Status de l'activation est inactive\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.status).to.eql(\"inactive\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"description": "Authorization",
+										"key": "Authorization",
+										"value": "Bearer {{access_token_Device}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/gateways/:gatewayId/state?mode=total&status=inactive",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"gateways",
+										":gatewayId",
+										"state"
+									],
+									"query": [
+										{
+											"key": "mode",
+											"value": "total",
+											"description": "Define devices impacted by status, this parameter is not required if status is inacive"
+										},
+										{
+											"key": "status",
+											"value": "inactive",
+											"description": "(Required) Active a specific mode or inactive installation"
+										}
+									],
+									"variable": [
+										{
+											"key": "gatewayId",
+											"value": "{{gwy}}",
+											"description": "(Required) Id of gateway"
+										}
+									]
+								},
+								"description": "Update the current state of a specific gateway<br>\n     <u>Notes</u> \n<ul>\n   <li>status=active and mode=total -> full activation of installation </li>\n   <li>status=active and mode=partial -> only activation of devices configured in partial mode</li>\n   <li>status=inactive  -> full inactive of installation, mode is not required</li>\n   <li>404 is returned when the gateway not exit on database</li>\n   <li>408 is returned when the gateway's state doesn't change</li>\n   <li>504 is returned when the gateway exit on the database and offline</li>\n</ul>"
+							},
+							"response": [
+								{
+									"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"State didn't change\"\r\n\t}",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/state?mode=<string>&status=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"state"
+											],
+											"query": [
+												{
+													"key": "mode",
+													"value": "<string>"
+												},
+												{
+													"key": "status",
+													"value": "<string>"
+												}
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Request Timeout",
+									"code": 408,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "{\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"400XX\",\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Valeurs d'un paramètre non valide\"\n}",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/state?mode=<string>&status=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"state"
+											],
+											"query": [
+												{
+													"key": "mode",
+													"value": "<string>"
+												},
+												{
+													"key": "status",
+													"value": "<string>"
+												}
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/state?mode=<string>&status=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"state"
+											],
+											"query": [
+												{
+													"key": "mode",
+													"value": "<string>"
+												},
+												{
+													"key": "status",
+													"value": "<string>"
+												}
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "*/*"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"503XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Service temporairement indisponible ou en maintenance.\"\r\n}",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/state?mode=<string>&status=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"state"
+											],
+											"query": [
+												{
+													"key": "mode",
+													"value": "<string>"
+												},
+												{
+													"key": "status",
+													"value": "<string>"
+												}
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Service Unavailable",
+									"code": 503,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"405XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Impossible de trouver l'élément\"\r\n}",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/state?mode=<string>&status=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"state"
+											],
+											"query": [
+												{
+													"key": "mode",
+													"value": "<string>"
+												},
+												{
+													"key": "status",
+													"value": "<string>"
+												}
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Method Not Allowed",
+									"code": 405,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"504XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Gateway is offline or unreachable\",\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\r\n}",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/state?mode=<string>&status=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"state"
+											],
+											"query": [
+												{
+													"key": "mode",
+													"value": "<string>"
+												},
+												{
+													"key": "status",
+													"value": "<string>"
+												}
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Gateway Timeout",
+									"code": 504,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"500XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Internal Server Error\",\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\r\n}",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/state?mode=<string>&status=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"state"
+											],
+											"query": [
+												{
+													"key": "mode",
+													"value": "<string>"
+												},
+												{
+													"key": "status",
+													"value": "<string>"
+												}
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"404XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Not found\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\"\r\n}",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/state?mode=<string>&status=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"state"
+											],
+											"query": [
+												{
+													"key": "mode",
+													"value": "<string>"
+												},
+												{
+													"key": "status",
+													"value": "<string>"
+												}
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						},
+						{
+							"name": "Get the current state of a specific gateway",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code should be 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"pm.test(\"Activation Status should be ctive\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.status).to.eql(\"inactive\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"description": "Authorization",
+										"key": "Authorization",
+										"value": "Bearer {{access_token_Device}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/gateways/:gatewayId/state",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"gateways",
+										":gatewayId",
+										"state"
+									],
+									"variable": [
+										{
+											"key": "gatewayId",
+											"value": "{{gwy}}",
+											"description": "(Required) Id of gateway"
+										}
+									]
+								},
+								"description": "Get the current state of a specific gateway <br>\n<u>Notes</u>\n<ul>\n   <li>404 is returned when the gateway not exit on database</li>\n   <li>504 is returned when the gateway exit on the database and offline</li>\n   <li>When the gateway is inactived, only parameter status is returned</li>\n</ul>"
+							},
+							"response": [
+								{
+									"name": "{\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"400XX\",\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Valeurs d'un paramètre non valide\"\n}",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/state",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"state"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"404XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Not found\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\"\r\n}",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/state",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"state"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "Forbidden",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/state",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"state"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Forbidden",
+									"code": 403,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"503XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Service temporairement indisponible ou en maintenance.\"\r\n}",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/state",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"state"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Service Unavailable",
+									"code": 503,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/state",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"state"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "*/*"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"500XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Internal Server Error\",\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\r\n}",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/state",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"state"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"405XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Impossible de trouver l'élément\"\r\n}",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId/state",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId",
+												"state"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Method Not Allowed",
+									"code": 405,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						},
+						{
+							"name": "Get information about a specific gateway Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200ok-Gateway info retourné\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"GatewayId retourné\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    var gatewayId = pm.collectionVariables.get(\"gwy\");\r",
+											"    pm.expect(jsonData.gatewayId).to.eql(gatewayId);\r",
+											"});\r",
+											"pm.test(\"@mac retourné\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    var mac= pm.collectionVariables.get(\"parameter\");\r",
+											"    pm.expect(jsonData.macAdresse).to.eql(mac);\r",
+											"});\r",
+											"pm.test(\"serialNumber retourné\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    var sn= pm.collectionVariables.get(\"SN-GWY\");\r",
+											"    pm.expect(jsonData.serialNumber).to.eql(sn);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Constructor crow\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.constructor).to.eql(\"Crow\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"location retourné non vide\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.location).not.to.be.empty;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"dernière date d'activité retourné\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.lastActivityDateTime).not.to.be.empty;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"état de connexion de la centrale (online)\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.connection).to.eql(\"Online\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"état d'instllation de la centrale\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.installationState).not.to.be.empty;\r",
+											"});\r",
+											"pm.test(\"état d'activation de la centrale (active)\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.state.status).to.eql(\"inactive\" || \"active\");\r",
+											"});\r",
+											"//ajouter le controle sur le date event!\r",
+											"pm.test(\"Derniers événements remontent bien\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.events).not.to.be.empty;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"template groupama/orange retourné\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    var conf= pm.collectionVariables.get(\"config_gwy\");\r",
+											"    pm.expect(jsonData.config.template).to.eql(conf);\r",
+											"});\r",
+											"\r",
+											"//-----------------------------------------\r",
+											"pm.test(\"Dernier eventremonte\", function () {\r",
+											"\r",
+											"  var jsonData = pm.response.json();\r",
+											"  var listOfObjects= jsonData.events;\r",
+											"    // var gwy = pm.collectionVariables.get(\"gwy\");\r",
+											"\r",
+											"  var dernierevent1 = pm.globals.get(\"event1\");\r",
+											"  var dernierevent2 = pm.globals.get(\"event2\");\r",
+											"\r",
+											"   var dernierevent= listOfObjects[0].eventId;\r",
+											"       pm.expect(dernierevent).to.eql(dernierevent1 || dernierevent2);\r",
+											"\r",
+											"});\r",
+											"\r",
+											"\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"description": "Authorization",
+										"key": "Authorization",
+										"value": "Bearer {{access_token_Device}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/gateways/:gatewayId?=",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"gateways",
+										":gatewayId"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": ""
+										}
+									],
+									"variable": [
+										{
+											"key": "gatewayId",
+											"value": "{{gwy}}",
+											"description": "(Required) Id of gateway"
+										}
+									]
+								},
+								"description": "Get information about a specific gateway <br>\n<u>Notes</u>\n<ul>\n   <li>206 is returned with state=null when gateway is offline and exit on database</li>\n   <li>404 is retuned when the gateway not exit on database</li>\n</ul>"
+							},
+							"response": [
+								{
+									"name": "Forbidden",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Forbidden",
+									"code": 403,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "*/*"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "500 message",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "Authorization",
+												"value": "<API Key>"
+											},
+											{
+												"description": "Authorization",
+												"key": "Authorization",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/gateways/:gatewayId",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"gateways",
+												":gatewayId"
+											],
+											"variable": [
+												{
+													"key": "gatewayId"
+												}
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://gw.zoneoutils.qa.protectline.fr/api/v1"
+		},
+		{
+			"key": "endpoint_wso2",
+			"value": "https://keycloak.zoneoutils.dev.protectline.fr/auth/realms/Protectline/protocol/openid-connect"
+		},
+		{
+			"key": "groupama_credentials_login",
+			"value": "groupama_application_PRODUCTION"
+		},
+		{
+			"key": "groupama_credentials_password",
+			"value": "98372853-d5be-418d-a969-3c72fa3215ba"
+		},
+		{
+			"key": "config_gwy",
+			"value": "groupama_TSB_SH-CP-V10-8F_0.0.0_v1"
+		},
+		{
+			"key": "contractid",
+			"value": "GPV2010000009222"
+		},
+		{
+			"key": "userId_G",
+			"value": "01010890009222"
+		},
+		{
+			"key": "userPassword_G",
+			"value": "12345678"
+		},
+		{
+			"key": "gwy",
+			"value": "Crow-0013A12023F5"
+		},
+		{
+			"key": "SN-GWY",
+			"value": "0043840"
+		},
+		{
+			"key": "parameter",
+			"value": "0013A12023F5"
+		},
+		{
+			"key": "pircamId",
+			"value": "Crow-0013A12023F5_0_0"
+		},
+		{
+			"key": "devicex",
+			"value": "Crow-0013A12023F5_0_0"
+		},
+		{
+			"key": "devicey",
+			"value": "Crow-0013A12023F5_0_3"
+		},
+		{
+			"key": "id-pir",
+			"value": "Crow-0013A12023F5_0_1"
+		},
+		{
+			"key": "id-keypad",
+			"value": "Crow-0013A12023F5_1_0"
+		},
+		{
+			"key": "id-sireneext",
+			"value": "Crow-0013A12023F5_255_0"
+		},
+		{
+			"key": "pack",
+			"value": "GRP"
+		}
+	]
+}

@@ -1,0 +1,1554 @@
+{
+	"info": {
+		"_postman_id": "04649633-b464-4c15-be2d-68814b608fe6",
+		"name": "2-Microservice---Site---ENV_QA2",
+		"description": "\n!!!!!!Mettre à jour les variables de la collection pour l'adapter a votre gateway/devices/user/configuration/environement !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n\nLes APIs exposés par la Team Usage pour les autres FT\n\nContact Support:\n Name: Team Usage\n Email: team.usages@protectline.fr",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Add new site",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200ok-Nouveu site ajouté\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.globals.set(\"contrat-s2\", pm.response.json().contractId);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableUrlEncoding": false
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"contractId\": \"{{contrat-S}}\",\n    \"secretCode\": \"{{$randomInt}}\",\n    \"supplier\": \"{{supplier}}\",\n    \"tenantName\": \"{{tenantname}}\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/sites",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"sites"
+					]
+				},
+				"description": "Add new site <br>\nNotes :\n<ul>\n <li>Only one parameters in query should be defined</li>\n"
+			},
+			"response": [
+				{
+					"name": "{\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"500XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Internal Server Error\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\"\r\n}",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"contractId\": \"2a1z2d12a1d\",\n    \"secretCode\": \"melon jaune\",\n    \"supplier\": \"Orange\",\n    \"tenantName\": \"Orange\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/sites",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"sites"
+							]
+						}
+					},
+					"status": "Internal Server Error",
+					"code": 500,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "{\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"400XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Bad parameter\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\"\r\n}",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"contractId\": \"2a1z2d12a1d\",\n    \"secretCode\": \"melon jaune\",\n    \"supplier\": \"Orange\",\n    \"tenantName\": \"Orange\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/sites",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"sites"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "OK",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"contractId\": \"2a1z2d12a1d\",\n    \"secretCode\": \"melon jaune\",\n    \"supplier\": \"Orange\",\n    \"tenantName\": \"Orange\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/sites",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"sites"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "*/*"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				}
+			]
+		},
+		{
+			"name": "Get site from a specific contract",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Liste des sites par gateway sont retourné\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/sites?contractId={{contrat-S}}&gatewayId=",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"sites"
+					],
+					"query": [
+						{
+							"key": "contractId",
+							"value": "{{contrat-S}}",
+							"description": "contractId"
+						},
+						{
+							"key": "gatewayId",
+							"value": "",
+							"description": "gatewayId"
+						}
+					]
+				},
+				"description": "Get site with gatewayId or contractId <br>\nNotes :\n<ul>\n <li>Only one parameters in query should be defined</li>\n"
+			},
+			"response": [
+				{
+					"name": "{\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"500XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Internal Server Error\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\"\r\n}",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/sites?contractId=<string>&gatewayId=<string>",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"sites"
+							],
+							"query": [
+								{
+									"key": "contractId",
+									"value": "<string>"
+								},
+								{
+									"key": "gatewayId",
+									"value": "<string>"
+								}
+							]
+						}
+					},
+					"status": "Internal Server Error",
+					"code": 500,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"404XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Not found\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\"\r\n}",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/sites?contractId=<string>&gatewayId=<string>",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"sites"
+							],
+							"query": [
+								{
+									"key": "contractId",
+									"value": "<string>"
+								},
+								{
+									"key": "gatewayId",
+									"value": "<string>"
+								}
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "OK",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/sites?contractId=<string>&gatewayId=<string>",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"sites"
+							],
+							"query": [
+								{
+									"key": "contractId",
+									"value": "<string>"
+								},
+								{
+									"key": "gatewayId",
+									"value": "<string>"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "*/*"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				}
+			]
+		},
+		{
+			"name": "Add gateway to a specific site",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200ok- Gatewy associé au nouveau site\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"gatewayId\": \"{{gwy-S}}\",\n  \"startDate\": \"2020-08-06T06:00:00Z\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/sites/:contractId/gateways",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"sites",
+						":contractId",
+						"gateways"
+					],
+					"variable": [
+						{
+							"key": "contractId",
+							"value": "{{contrat-S}}",
+							"description": "(Required) contractId"
+						}
+					]
+				},
+				"description": "Add gateway to a specific site <br>\nNotes :\n<ul>\n <li>Only one parameters in query should be defined</li>\n"
+			},
+			"response": [
+				{
+					"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"404XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Not found\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\"\r\n}",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"gatewayId\": \"Crow-001321AD5648\",\n    \"startDate\": \"2020-08-06T06:00:00Z\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/sites/:contractId/gateways",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"sites",
+								":contractId",
+								"gateways"
+							],
+							"variable": [
+								{
+									"key": "contractId"
+								}
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "{\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"400XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Bad parameter\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\"\r\n}",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"gatewayId\": \"Crow-001321AD5648\",\n    \"startDate\": \"2020-08-06T06:00:00Z\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/sites/:contractId/gateways",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"sites",
+								":contractId",
+								"gateways"
+							],
+							"variable": [
+								{
+									"key": "contractId"
+								}
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "{\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"500XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Internal Server Error\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\"\r\n}",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"gatewayId\": \"Crow-001321AD5648\",\n    \"startDate\": \"2020-08-06T06:00:00Z\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/sites/:contractId/gateways",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"sites",
+								":contractId",
+								"gateways"
+							],
+							"variable": [
+								{
+									"key": "contractId"
+								}
+							]
+						}
+					},
+					"status": "Internal Server Error",
+					"code": 500,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "OK",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"gatewayId\": \"Crow-001321AD5648\",\n    \"startDate\": \"2020-08-06T06:00:00Z\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/sites/:contractId/gateways",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"sites",
+								":contractId",
+								"gateways"
+							],
+							"variable": [
+								{
+									"key": "contractId"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "*/*"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				}
+			]
+		},
+		{
+			"name": "Get site from a specific gateway",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Liste des sites par gateway sont retourné\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableUrlEncoding": false
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/sites?contractId=&gatewayId={{gwy-S}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"sites"
+					],
+					"query": [
+						{
+							"key": "contractId",
+							"value": "",
+							"description": "contractId"
+						},
+						{
+							"key": "gatewayId",
+							"value": "{{gwy-S}}",
+							"description": "gatewayId"
+						}
+					]
+				},
+				"description": "Get site with gatewayId or contractId <br>\nNotes :\n<ul>\n <li>Only one parameters in query should be defined</li>\n"
+			},
+			"response": [
+				{
+					"name": "OK",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/sites?contractId=<string>&gatewayId=<string>",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"sites"
+							],
+							"query": [
+								{
+									"key": "contractId",
+									"value": "<string>"
+								},
+								{
+									"key": "gatewayId",
+									"value": "<string>"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "*/*"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "{\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"500XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Internal Server Error\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\"\r\n}",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/sites?contractId=<string>&gatewayId=<string>",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"sites"
+							],
+							"query": [
+								{
+									"key": "contractId",
+									"value": "<string>"
+								},
+								{
+									"key": "gatewayId",
+									"value": "<string>"
+								}
+							]
+						}
+					},
+					"status": "Internal Server Error",
+					"code": 500,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"404XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Not found\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\"\r\n}",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/sites?contractId=<string>&gatewayId=<string>",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"sites"
+							],
+							"query": [
+								{
+									"key": "contractId",
+									"value": "<string>"
+								},
+								{
+									"key": "gatewayId",
+									"value": "<string>"
+								}
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				}
+			]
+		},
+		{
+			"name": "Add new site de test",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200ok-Nouveu site de test ajouté\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.globals.set(\"contrat-s2\", pm.response.json().contractId);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableUrlEncoding": false
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"contractId\": \"test-contrat\",\n    \"secretCode\": \"{{$randomInt}}\",\n    \"supplier\": \"{{supplier}}\",\n    \"tenantName\": \"{{tenantname}}\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/sites",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"sites"
+					]
+				},
+				"description": "Add new site <br>\nNotes :\n<ul>\n <li>Only one parameters in query should be defined</li>\n"
+			},
+			"response": [
+				{
+					"name": "{\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"500XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Internal Server Error\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\"\r\n}",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"contractId\": \"2a1z2d12a1d\",\n    \"secretCode\": \"melon jaune\",\n    \"supplier\": \"Orange\",\n    \"tenantName\": \"Orange\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/sites",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"sites"
+							]
+						}
+					},
+					"status": "Internal Server Error",
+					"code": 500,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "{\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"400XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Bad parameter\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\"\r\n}",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"contractId\": \"2a1z2d12a1d\",\n    \"secretCode\": \"melon jaune\",\n    \"supplier\": \"Orange\",\n    \"tenantName\": \"Orange\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/sites",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"sites"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "OK",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"contractId\": \"2a1z2d12a1d\",\n    \"secretCode\": \"melon jaune\",\n    \"supplier\": \"Orange\",\n    \"tenantName\": \"Orange\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/sites",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"sites"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "*/*"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				}
+			]
+		},
+		{
+			"name": "Add test gateway to a specific site",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200ok- Gatewy associé au nouveau site\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"gatewayId\": \"Crow-testgateway\",\n  \"startDate\": \"2020-08-06T06:00:00Z\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/sites/:contractId/gateways",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"sites",
+						":contractId",
+						"gateways"
+					],
+					"variable": [
+						{
+							"description": "(Required) contractId",
+							"key": "contractId",
+							"value": "test-contrat"
+						}
+					]
+				},
+				"description": "Add gateway to a specific site <br>\nNotes :\n<ul>\n <li>Only one parameters in query should be defined</li>\n"
+			},
+			"response": [
+				{
+					"name": "{\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"500XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Internal Server Error\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\"\r\n}",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"gatewayId\": \"Crow-001321AD5648\",\n    \"startDate\": \"2020-08-06T06:00:00Z\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/sites/:contractId/gateways",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"sites",
+								":contractId",
+								"gateways"
+							],
+							"variable": [
+								{
+									"key": "contractId"
+								}
+							]
+						}
+					},
+					"status": "Internal Server Error",
+					"code": 500,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "{\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"400XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Bad parameter\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\"\r\n}",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"gatewayId\": \"Crow-001321AD5648\",\n    \"startDate\": \"2020-08-06T06:00:00Z\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/sites/:contractId/gateways",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"sites",
+								":contractId",
+								"gateways"
+							],
+							"variable": [
+								{
+									"key": "contractId"
+								}
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "OK",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"gatewayId\": \"Crow-001321AD5648\",\n    \"startDate\": \"2020-08-06T06:00:00Z\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/sites/:contractId/gateways",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"sites",
+								":contractId",
+								"gateways"
+							],
+							"variable": [
+								{
+									"key": "contractId"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "*/*"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"404XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Not found\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\"\r\n}",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"gatewayId\": \"Crow-001321AD5648\",\n    \"startDate\": \"2020-08-06T06:00:00Z\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/sites/:contractId/gateways",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"sites",
+								":contractId",
+								"gateways"
+							],
+							"variable": [
+								{
+									"key": "contractId"
+								}
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				}
+			]
+		},
+		{
+			"name": "Update Site",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200ok-Nouveu site modifié\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \r\n    \"secretCode\": \"1125\"\r\n\r\n    \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/sites/:contractId",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"sites",
+						":contractId"
+					],
+					"variable": [
+						{
+							"key": "contractId",
+							"value": "test-contrat"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update gateway association ",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"gatewayId\": \"test-gateway\",\r\n  \"priority\": 1,\r\n  \"gatewayType\": \"TSB\",\r\n  \"startDate\": \"1977-04-22T06:00:00Z\",\r\n  \"endDate\": \"2021-04-12T06:00:00Z\"\r\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/sites/:contractId/gateways/test-gateway",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"sites",
+						":contractId",
+						"gateways",
+						"test-gateway"
+					],
+					"variable": [
+						{
+							"key": "contractId",
+							"value": "test-contrat"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete site from a specific contract",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200ok- Site supprimé\", function () {\r",
+							"    pm.response.to.have.status(206);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/sites/:contractId",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"sites",
+						":contractId"
+					],
+					"variable": [
+						{
+							"key": "contractId",
+							"value": "test-contrat",
+							"description": "(Required) contractId"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "OK",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/sites/:contractId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"sites",
+								":contractId"
+							],
+							"variable": [
+								{
+									"key": "contractId"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "*/*"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"404XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Not found\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\"\r\n}",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/sites/:contractId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"sites",
+								":contractId"
+							],
+							"variable": [
+								{
+									"key": "contractId"
+								}
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "{\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"500XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Internal Server Error\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\"\r\n}",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/sites/:contractId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"sites",
+								":contractId"
+							],
+							"variable": [
+								{
+									"key": "contractId"
+								}
+							]
+						}
+					},
+					"status": "Internal Server Error",
+					"code": 500,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				}
+			]
+		},
+		{
+			"name": "Get site from a specific contract",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"404-site supprimé n'exise plus dans la liste\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"/*pm.test(\"Site ajouté exist dans la liste\", function () {\r",
+							"  var listOfObjects = pm.response.json();\r",
+							"\r",
+							"   listOfObjects.forEach(function(entry) \r",
+							"{ \r",
+							"\r",
+							"    var data = String(contrat-s2);\r",
+							"\r",
+							"pm.expect(entry.contractId).to.eql(data);\r",
+							"})\r",
+							"});*/\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableUrlEncoding": false
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/sites?contractId=test-contrat&gatewayId=",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"sites"
+					],
+					"query": [
+						{
+							"key": "contractId",
+							"value": "test-contrat",
+							"description": "contractId"
+						},
+						{
+							"key": "gatewayId",
+							"value": "",
+							"description": "gatewayId"
+						}
+					]
+				},
+				"description": "Get site with gatewayId or contractId <br>\nNotes :\n<ul>\n <li>Only one parameters in query should be defined</li>\n"
+			},
+			"response": [
+				{
+					"name": "OK",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/sites?contractId=<string>&gatewayId=<string>",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"sites"
+							],
+							"query": [
+								{
+									"key": "contractId",
+									"value": "<string>"
+								},
+								{
+									"key": "gatewayId",
+									"value": "<string>"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "*/*"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "{\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"404XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Not found\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\"\r\n}",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/sites?contractId=<string>&gatewayId=<string>",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"sites"
+							],
+							"query": [
+								{
+									"key": "contractId",
+									"value": "<string>"
+								},
+								{
+									"key": "gatewayId",
+									"value": "<string>"
+								}
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "{\n&nbsp;&nbsp;&nbsp;&nbsp;\"errorCode\": \"500XX\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"description\": \"Internal Server Error\",\r\n&nbsp;&nbsp;&nbsp;&nbsp;\"message\": \"xxx\"\r\n}",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/sites?contractId=<string>&gatewayId=<string>",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"sites"
+							],
+							"query": [
+								{
+									"key": "contractId",
+									"value": "<string>"
+								},
+								{
+									"key": "gatewayId",
+									"value": "<string>"
+								}
+							]
+						}
+					},
+					"status": "Internal Server Error",
+					"code": 500,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				}
+			]
+		},
+		{
+			"name": "GET SITE FROM Contrat",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Liste des sites par contrat sont retourné\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/sites?contractId={{contrat-S}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"",
+						"sites"
+					],
+					"query": [
+						{
+							"key": "contractId",
+							"value": "{{contrat-S}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Site from gateway",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Liste des sites par gateway sont retourné\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}//sites/gateway/{{gwy-S}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"",
+						"sites",
+						"gateway",
+						"{{gwy-S}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "site.teamusages.qa.protectline.fr"
+		},
+		{
+			"key": "gwy-S",
+			"value": "Crow-0013A12023F5"
+		},
+		{
+			"key": "contrat-S",
+			"value": "GPV2010000009222"
+		},
+		{
+			"key": "tenantname",
+			"value": "Groupama"
+		},
+		{
+			"key": "supplier",
+			"value": "Groupama"
+		}
+	]
+}
